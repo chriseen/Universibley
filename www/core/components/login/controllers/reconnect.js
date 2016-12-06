@@ -22,7 +22,7 @@ angular.module('mm.core.login')
  * @name mmLoginReconnectCtrl
  */
 .controller('mmLoginReconnectCtrl', function($scope, $state, $stateParams, $mmSitesManager, $mmApp, $mmUtil, $ionicHistory,
-            $mmLoginHelper) {
+            $mmLoginHelper, $mmEvents, mmCoreEventLogout) {
 
     var infositeurl = $stateParams.infositeurl; // Siteurl in site info. It might be different than siteurl (http/https).
     $scope.siteurl = $stateParams.siteurl;
@@ -44,13 +44,27 @@ angular.module('mm.core.login')
 
     $scope.cancel = function() {
         $mmSitesManager.logout().finally(function() {
+            // $ionicHistory.nextViewOptions({
+            //     disableAnimate: true,
+            //     disableBack: true
+            // });
+            // $state.go('mm_login.sites');
+        });
+    };
+
+    logoutObserver = $mmEvents.on(mmCoreEventLogout, function(data) {
+        $mmSitesManager.deleteSite(data.siteId).finally(function() {
             $ionicHistory.nextViewOptions({
                 disableAnimate: true,
                 disableBack: true
             });
-            $state.go('mm_login.sites');
+            $state.go('mm_login.credentials', {
+                siteurl: mmCoreConfigConstants.siteurl,
+                username: data.userName
+            });
+            // $state.go('mm_login.sites');
         });
-    };
+    });
 
     $scope.login = function() {
 
@@ -89,5 +103,11 @@ angular.module('mm.core.login')
             $mmLoginHelper.treatUserTokenError(siteurl, error);
         });
     };
+
+    $scope.$on('$destroy', function() {
+        if (logoutObserver && logoutObserver.off){
+            logoutObserver.off();
+        }
+    });
 
 });
