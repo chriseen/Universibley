@@ -29,7 +29,7 @@ angular.module('mm.core.login')
         username: $stateParams.username
     };
 
-    var siteChecked = false,
+    var siteChecked = true,
         urlToOpen = $stateParams.urltoopen,
         siteConfig = $stateParams.siteconfig;
 
@@ -88,12 +88,12 @@ angular.module('mm.core.login')
         }
     }
 
-    if ($mmLoginHelper.isFixedUrlSet()) {
-        // Fixed URL, we need to check if it uses browser SSO login.
-        checkSite($scope.siteurl);
-    } else {
-        siteChecked = true;
-    }
+    // if ($mmLoginHelper.isFixedUrlSet()) {
+    //     // Fixed URL, we need to check if it uses browser SSO login.
+    //     checkSite($scope.siteurl);
+    // } else {
+    //     siteChecked = true;
+    // }
 
     $scope.login = function() {
 
