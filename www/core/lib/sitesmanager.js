@@ -695,10 +695,10 @@ angular.module('mm.core')
             return $q.when();
         }
         var siteId = currentSite.getId();
-
+        var userName = currentSite.infos.username;
         currentSite = undefined;
         return $mmApp.getDB().remove(mmCoreCurrentSiteStore, 1).finally(function() {
-            $mmEvents.trigger(mmCoreEventLogout, siteId);
+            $mmEvents.trigger(mmCoreEventLogout, {siteId: siteId, userName: userName});
         });
     };
 
