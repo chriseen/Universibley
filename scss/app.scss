@@ -35,6 +35,11 @@ $button-default-border: $positive;
 $button-default-active-bg: $positive;
 $button-default-active-border: $positive;
 
+// Modify default android spinner color
+.spinner-android {
+    stroke: $positive;
+}
+
 // Setting the default button to button-outline.
 .button.active, .button.activated {
   background-color: $button-default-active-bg;
