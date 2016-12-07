@@ -16,7 +16,8 @@
  */
 
 // Bar content.
-$bar-content-bg: #f70 !default;
+$bar-content-bg: #41c8f4 !default;
+$bar-content-bg-end: #b1d658 !default;
 $bar-content-border: transparent !default;
 $bar-content-text: #fff !default;
 
@@ -63,7 +64,7 @@ $mm-input-required-asterisk-color: #ff4136 !default;
  * App Branding
  */
 .mm-bglogo {
-  background-color: white; /* Change this to add a bg image or change color */
+  background-color: #7ccfa1; /* Change this to add a bg image or change color */
   background-repeat: no-repeat;
   background-position: center center;
   width: 100%;
@@ -73,14 +74,22 @@ $mm-input-required-asterisk-color: #ff4136 !default;
 }
 
 .mm-logo {
-  background-image: url('../img/moodle.png'); /* Change logo here */
+  background-image: url(../img/universibley.png); /* Change logo here */
   background-repeat: no-repeat;
   background-position: center center;
+  background-size: 180px auto;
   width: 100%;
   position: absolute;
   top: 0;
   bottom: 0;
   text-align: center;
+
+  ion-spinner {
+    position: absolute;
+    width: 100%;
+    left: 0px;
+    bottom: 20%;
+  }
 }
 
 .mm-logo:before {
@@ -116,9 +125,22 @@ em {
   }
 }
 
-// Default bar.
-.bar-content {
-  @include bar-style($bar-content-bg, $bar-content-border, $bar-content-text);
+// Gradient bar
+
+@mixin bar-style-gradient($bg-color1, $bg-color2, $border-color, $color) {
+  border-color: $border-color;
+  background-color: $bg-color1;
+  background-image: linear-gradient(135deg, $bg-color1 0%, $bg-color2 100%);
+  background-size: 100%;
+  color: $color;
+
+  .title {
+    color: $color;
+  }
+}
+
+.bar-content, .bar-header {
+  @include bar-style-gradient($bar-content-bg, $bar-content-bg-end, $bar-content-border, $bar-content-text);
   .button {
     @include button-style($bar-content-bg, $bar-content-border, $bar-content-bg, $bar-content-border, $bar-content-text);
     @include button-clear(#fff, $bar-title-font-size);
