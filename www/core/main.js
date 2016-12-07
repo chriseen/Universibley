@@ -39,6 +39,7 @@ angular.module('mm.core', ['pascalprecht.translate'])
     // Set tabs to bottom on Android.
     $ionicConfigProvider.platform.android.tabs.position('bottom');
     $ionicConfigProvider.form.checkbox('circle');
+    $ionicConfigProvider.backButton.icon("ion-ios-arrow-left").previousTitleText(false);
 
     // Use JS scrolling.
     $ionicConfigProvider.scrolling.jsScrolling(true);
