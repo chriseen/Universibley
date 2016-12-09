@@ -43,26 +43,21 @@ angular.module('mm.core.login')
     });
 
     $scope.cancel = function() {
+        $ionicHistory.nextViewOptions({
+            disableAnimate: true,
+            disableBack: true
+        });
         $mmSitesManager.logout().finally(function() {
-            // $ionicHistory.nextViewOptions({
-            //     disableAnimate: true,
-            //     disableBack: true
-            // });
-            // $state.go('mm_login.sites');
         });
     };
 
     logoutObserver = $mmEvents.on(mmCoreEventLogout, function(data) {
         $mmSitesManager.deleteSite(data.siteId).finally(function() {
-            $ionicHistory.nextViewOptions({
-                disableAnimate: true,
-                disableBack: true
-            });
+            debugger;
             $state.go('mm_login.credentials', {
                 siteurl: mmCoreConfigConstants.siteurl,
                 username: data.userName
             });
-            // $state.go('mm_login.sites');
         });
     });
 
