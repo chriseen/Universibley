@@ -22,7 +22,7 @@ angular.module('mm.core.sidemenu')
  * @name mmSideMenuCtrl
  */
 .controller('mmSideMenuCtrl', function($scope, $state, $mmSideMenuDelegate, $mmSitesManager, $mmSite, $mmEvents,
-            $timeout, mmCoreEventLanguageChanged, mmCoreEventSiteUpdated, $mmSideMenu, mmCoreEventLogout, mmCoreConfigConstants) {
+            $timeout, mmCoreEventLanguageChanged, mmCoreEventSiteUpdated, $mmSideMenu, mmCoreEventLogout, mmCoreConfigConstants, $mmMoxtra, $mmUtil) {
 
     $mmSideMenu.setScope($scope);
     $scope.handlers = $mmSideMenuDelegate.getNavHandlers();
@@ -33,6 +33,25 @@ angular.module('mm.core.sidemenu')
         $mmSitesManager.logout().finally(function() {
         });
     };
+
+    $scope.onStateHandler = function(state){
+        // if (state == 'site.messages'){
+        //     var currentUser = $mmSitesManager.getCurrentSite().infos;
+        //     var modal = $mmUtil.showModalLoading('mm.core.loading', true);
+
+        //     $mmMoxtra.authMoxtra(currentUser.userid, currentUser.firstname, currentUser.lastname)
+        //     .then(function(response){
+        //         $mmMoxtra.initMoxtra(response.data.access_token);
+        //         $mmMoxtra.openChat();
+        //     }, function(response){
+        //         debugger;
+        //     })
+        //     .finally(function(){
+        //         modal.dismiss();
+        //     });
+        // }else
+            $state.go(state);
+    }
 
     logoutObserver = $mmEvents.on(mmCoreEventLogout, function(data) {
         $mmSitesManager.deleteSite(data.siteId).finally(function() {
