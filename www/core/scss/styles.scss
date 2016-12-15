@@ -78,7 +78,7 @@ html, body, div, span, applet, object, iframe, h1, h2, .item .item-heading, h3, 
 }
 
 .mm-bglogo {
-  background-color: #94e0b6; /* Change this to add a bg image or change color */
+  background-color: #fff; /* Change this to add a bg image or change color */
   background-repeat: no-repeat;
   background-position: center center;
   width: 100%;
@@ -91,7 +91,7 @@ html, body, div, span, applet, object, iframe, h1, h2, .item .item-heading, h3, 
   background-image: url(../img/universibley.png); /* Change logo here */
   background-repeat: no-repeat;
   background-position: center center;
-  background-size: 180px auto;
+  background-size: 140px auto;
   width: 100%;
   position: absolute;
   top: 0;
@@ -102,7 +102,7 @@ html, body, div, span, applet, object, iframe, h1, h2, .item .item-heading, h3, 
     position: absolute;
     width: 100%;
     left: 0px;
-    bottom: 20%;
+    bottom: 28%;
   }
 }
 
