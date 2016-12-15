@@ -63,6 +63,20 @@ $mm-input-required-asterisk-color: #ff4136 !default;
 /**
  * App Branding
  */
+
+@font-face {
+    font-family: OpenSansRegular;
+    src: url(../fonts/OpenSans-Regular.ttf);
+}
+
+body{
+  font-family: OpenSansRegular, "Helvetica Neue", "Segoe UI", sans-serif;
+}
+
+html, body, div, span, applet, object, iframe, h1, h2, .item .item-heading, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, i, u, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, fieldset, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video{
+  font-family: OpenSansRegular, "Helvetica Neue", "Segoe UI", sans-serif;
+}
+
 .mm-bglogo {
   background-color: #7ccfa1; /* Change this to add a bg image or change color */
   background-repeat: no-repeat;
@@ -472,7 +486,7 @@ mm-format-text, *[mm-format-text] {
 }
 
 .mm-loading-content {
-  padding-bottom: 1px; /* This makes height be real */
+  padding-bottom: 10px;
 }
 
 mm-loading.mm-loading-noheight .mm-loading-content {
