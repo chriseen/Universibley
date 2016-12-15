@@ -6,7 +6,7 @@ $bar-side-menu-text-color: $bar-content-text !default;
 
 // Bar styles
 .bar-side-menu {
-  @include bar-style($bar-side-menu-color, $bar-side-menu-border-color, $bar-side-menu-text-color);
+  @include bar-style-gradient($bar-content-bg, $bar-content-bg-end, $bar-content-border, $bar-content-text);
   height: $bar-side-menu-height !important; // MOBILE-959: Added !important to fix side menu header in iOS.
   .item {
     background: transparent;
