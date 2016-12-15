@@ -37,7 +37,7 @@ angular.module('mm.core.settings')
         });
     });
 
-    $mmConfig.get(mmCoreSettingsSyncOnlyOnWifi, true).then(function(syncOnlyOnWifi) {
+    $mmConfig.get(mmCoreSettingsSyncOnlyOnWifi, false).then(function(syncOnlyOnWifi) {
         $scope.syncOnlyOnWifi = syncOnlyOnWifi;
     });
 
