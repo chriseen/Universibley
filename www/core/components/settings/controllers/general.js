@@ -60,4 +60,5 @@ angular.module('mm.core.settings')
     } else {
         $scope.showReport = false;
     }
+    $scope.showReport = false;
 });
