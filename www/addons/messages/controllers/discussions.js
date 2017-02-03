@@ -21,18 +21,18 @@ angular.module('mm.addons.messages')
  * @ngdoc controller
  * @name mmaMessagesDiscussionsCtrl
  */
-.controller('mmaMessagesDiscussionsCtrl', function($scope, $mmUtil, $mmaMessages, $rootScope, $mmEvents, $mmSite,
-            mmCoreSplitViewLoad, mmaMessagesNewMessageEvent) {
+.controller('mmaMessagesDiscussionsCtrl', function($scope, $ionicActionSheet, $cordovaClipboard, $cordovaDialogs, $mmUtil, $mmaMessages, $rootScope, $mmEvents, $mmSite, $mmSitesManager,
+            mmCoreSplitViewLoad, mmaMessagesNewMessageEvent, mmaMoxtraClientID, mmaMoxtraClientSecret) {
     var newMessagesObserver,
         siteId = $mmSite.getId(),
         discussions;
 
     $scope.loaded = false;
+    $scope.modal = null;
 
     function fetchDiscussions() {
         return $mmaMessages.getDiscussions().then(function(discs) {
             discussions = discs;
-
             // Convert to an array for sorting.
             var array = [];
             angular.forEach(discussions, function(v) {
@@ -53,6 +53,101 @@ angular.module('mm.addons.messages')
             return fetchDiscussions();
         });
     }
+
+    $scope.onDiscussion = function(disc){
+
+        var userId = disc.message.user;
+        var currentUser = $mmSitesManager.getCurrentSite().infos;
+        var chat = window.cordova.require("cordova/plugin/MoxtraMeetIntegration");
+
+        // moxtraplugin1.0.4@1.4.0  -  the latest version of android Moxtra Meet plugin that Jay provided
+
+        chat.setInviteButtonHidden(false);//default is false.
+        chat.setSupportAutoJoinAudio(true);//default is true.
+        chat.setSupportAutoStartScreenShare(true);//default is true.
+        chat.setSupportInviteContactsBySMS(true);
+        chat.setSupportInviteContactsByEmail(true);
+        //customize email title & contents.
+        chat.setSubjectOfEmailContentTitle('This is email title');
+
+        //cutomize features
+        chat.setAutoHideControlBar(false);//default is false.
+        chat.setSupportVoIP(true);//default is true.
+        chat.setSupportChat(true);//default is true.
+
+        // startChat() needs to accept at least 2 parameters: one for chatRoomName, and one for the individual peer ID for my friend 
+        // it should return binderID as a successful response
+
+        // Get Binder List
+        // https://developer.moxtra.com/docs/docs-rest-api/conversation/
+        
+        $scope.modal = $mmUtil.showModalLoading();
+
+        chat.initUser(
+            function(){
+
+                $ionicActionSheet.show({
+                    buttons: [
+                        { text: 'Create Chat' },
+                        { text: 'Join Chat' }
+                    ],
+                    titleText: 'Select your choice',
+                    cancelText: 'Cancel',
+                    cancel: function(){
+                        $scope.modal.dismiss();
+                    },
+                    buttonClicked: function(index) {
+                        if (index){
+                            $cordovaDialogs.prompt("Enter your contact's binderID.")
+                            .then(function(result) {
+                                var binderID = result.input1;
+                                var btnIndex = result.buttonIndex;
+
+                                if ((btnIndex == 1) && (binderID.trim().length > 0)){
+                                    console.log("BINDER ID: " + binderID);
+                                    chat.openChat(binderID + "");
+                                }
+
+                                $scope.modal.dismiss();
+                            });
+                        }else{
+                            $scope.startChat(chat, userId);
+                        }
+
+                        return true;
+                    }
+                });
+            },
+            function(){
+                $scope.modal.dismiss();
+            },
+            currentUser.firstname,
+            currentUser.lastname,
+            currentUser.userid + "",
+            null,
+            mmaMoxtraClientID,
+            mmaMoxtraClientSecret
+        );
+    };
+
+    $scope.startChat = function(chat, userId){
+
+        chat.startChat(function(binderID){
+            $cordovaClipboard.copy(binderID);
+
+            $cordovaDialogs.alert("New Binder ID - " + binderID + " - is now copied to your clipboard automatically!")
+            .then(function() {
+                console.log("BINDER ID: " + binderID);
+                chat.openChat(binderID + "");
+                $scope.modal.dismiss();
+            });
+        },
+        function(errorID){
+            $scope.modal.dismiss();
+        },
+        "New Binder",
+        userId + "");
+    };
 
     $scope.refresh = function() {
         refreshData().finally(function() {

@@ -30,8 +30,15 @@ angular.module('mm.core.sidemenu')
     $scope.siteinfo = $mmSite.getInfo();
 
     $scope.logout = function() {
+        var chat;
+        if (window.cordova)
+            chat = window.cordova.require("cordova/plugin/MoxtraMeetIntegration");
+
         $mmSitesManager.logout().finally(function() {
         });
+        
+        if (window.cordova)
+            chat.logout(function(){});
     };
 
     $scope.onStateHandler = function(state){

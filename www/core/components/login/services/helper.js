@@ -18,6 +18,8 @@ angular.module('mm.core.login')
 .constant('mmLoginSSOInAppCode', 3) // SSO in embedded browser is required.
 .constant('mmLoginLaunchSiteURL', 'mmLoginLaunchSiteURL')
 .constant('mmLoginLaunchPassport', 'mmLoginLaunchPassport')
+.constant('mmMoxtraClientID', 'tOXWlNAfcxE')
+.constant('mmMoxtraClientSecret', 'goFmrHgg7ms')
 
 /**
  * Service to provide some helper functionalities for the login component.
@@ -28,7 +30,7 @@ angular.module('mm.core.login')
  */
 .factory('$mmLoginHelper', function($q, $log, $mmConfig, mmLoginSSOCode, mmLoginSSOInAppCode, mmLoginLaunchSiteURL,
             mmLoginLaunchPassport, md5, $mmSite, $mmSitesManager, $mmLang, $mmUtil, $state, $mmAddonManager,
-            $translate, mmCoreConfigConstants) {
+            $translate, mmCoreConfigConstants, mmMoxtraClientID, mmMoxtraClientSecret) {
 
     $log = $log.getInstance('$mmLoginHelper');
 
@@ -163,6 +165,22 @@ angular.module('mm.core.login')
      * @return {Promise} Promise resolved when the state changes.
      */
     self.goToSiteInitialPage = function() {
+        var currentUser = $mmSitesManager.getCurrentSite().infos;
+
+        if (window.cordova){
+            var chat = window.cordova.require("cordova/plugin/MoxtraMeetIntegration");
+            chat.initUser(
+                function(){},
+                function(){},
+                currentUser.firstname,
+                currentUser.lastname,
+                currentUser.userid + "",
+                null,
+                mmMoxtraClientID,
+                mmMoxtraClientSecret
+            );
+        }
+
         if ($mmSite.getInfo() && $mmSite.getInfo().userhomepage === 0) {
             // Configured to go to Site Home. Check if plugin is installed in the app.
             var $mmaFrontpage = $mmAddonManager.get('$mmaFrontpage');
